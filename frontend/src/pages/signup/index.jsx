@@ -15,7 +15,7 @@ import Image from "../../components/ui/image";
 import {useState} from "react";
 import {useTheme} from "@emotion/react";
 
-const SignIn = () => {
+const SignUp = () => {
   const {
     palette: {
       primary: {light},
@@ -51,10 +51,10 @@ const SignIn = () => {
           }}
           maxWidth={"sm"}>
           <Image src={logo} alt="Logo" maxWidth="150px" />
-          <Typography variant="h3">Sign In</Typography>
+          <Typography variant="h3">Sign Up</Typography>
           <Box>
             <Button variant="outlined">
-              <GoogleIcon sx={{mr: 2}} />{" "}
+              <GoogleIcon sx={{mr: 2}} />
               <Typography>Continue With Google</Typography>
             </Button>
           </Box>
@@ -66,6 +66,14 @@ const SignIn = () => {
               alignItems: "center",
               width: "100%",
             }}>
+            <TextField
+              type="text"
+              label="Name"
+              variant="outlined"
+              size="small"
+              fullWidth={true}
+            />
+
             <TextField
               type="email"
               label="Your account email"
@@ -89,10 +97,10 @@ const SignIn = () => {
               </IconButton>
             </Box>
             <Typography>
-              Have not an Account? <Link href="/signup">Sign Up Here</Link>
+              Already Have an Account? <Link href="/signin">Log In Here</Link>
             </Typography>
             <Button type="submit" variant="contained" sx={{width: "200px"}}>
-              Sign In
+              Sign Up
             </Button>
           </form>
         </Box>
@@ -101,4 +109,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
