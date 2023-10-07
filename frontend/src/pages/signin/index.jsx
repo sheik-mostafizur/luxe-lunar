@@ -26,14 +26,14 @@ const SignIn = () => {
   const onSubmit = (data) => console.log(data);
 
   return (
-    <Box bgcolor="primary.light">
+    <Box bgcolor="primary.light" sx={{height: "100vh"}}>
       <Container
         maxWidth="lg"
         sx={{
-          height: "100vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          height: "100vh",
         }}>
         <Box
           sx={{
