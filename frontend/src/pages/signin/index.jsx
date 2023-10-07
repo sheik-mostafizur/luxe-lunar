@@ -13,9 +13,17 @@ import {logo} from "../../assets/images";
 import Image from "../../components/ui/image";
 import {useState} from "react";
 import CustomLink from "../../components/ui/CustomLink";
+import {useForm} from "react-hook-form";
 
 const SignIn = () => {
   const [isShowPass, setIsShowPass] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
+  const onSubmit = (data) => console.log(data);
 
   return (
     <Box bgcolor="primary.light">
@@ -50,6 +58,7 @@ const SignIn = () => {
             </Button>
           </Box>
           <form
+            onSubmit={handleSubmit(onSubmit)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -63,7 +72,18 @@ const SignIn = () => {
               variant="outlined"
               size="small"
               fullWidth={true}
+              {...register("email", {required: "Email Address is required"})}
             />
+            {errors.email && (
+              <Typography
+                color="red"
+                sx={{
+                  textAlign: "left",
+                  width: "100%",
+                }}>
+                {errors.email.message}
+              </Typography>
+            )}
 
             <Box sx={{width: "100%", position: "relative"}}>
               <TextField
@@ -72,12 +92,25 @@ const SignIn = () => {
                 variant="outlined"
                 size="small"
                 fullWidth={true}
+                {...register("password", {
+                  required: "Password is required",
+                })}
               />
               <IconButton
                 onClick={() => setIsShowPass(!isShowPass)}
                 sx={{position: "absolute", right: "1rem"}}>
                 {isShowPass ? <RemoveRedEyeIcon /> : <VisibilityOffIcon />}
               </IconButton>
+              {errors.password && (
+                <Typography
+                  color="red"
+                  sx={{
+                    textAlign: "left",
+                    width: "100%",
+                  }}>
+                  {errors.password.message}
+                </Typography>
+              )}
             </Box>
             <Typography>
               Have not an Account?{" "}

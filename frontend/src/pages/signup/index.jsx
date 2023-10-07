@@ -13,9 +13,21 @@ import {logo} from "../../assets/images";
 import Image from "../../components/ui/image";
 import {useState} from "react";
 import CustomLink from "../../components/ui/CustomLink";
+import {useForm} from "react-hook-form";
 
 const SignUp = () => {
   const [isShowPass, setIsShowPass] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: {errors},
+    watch,
+  } = useForm();
+  const password = watch("password");
+
+  const onSubmit = (data) => console.log(data);
+
   return (
     <Box bgcolor="primary.light">
       <Container
@@ -49,6 +61,7 @@ const SignUp = () => {
             </Button>
           </Box>
           <form
+            onSubmit={handleSubmit(onSubmit)}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -62,7 +75,18 @@ const SignUp = () => {
               variant="outlined"
               size="small"
               fullWidth={true}
+              {...register("name", {required: "Name is required"})}
             />
+            {errors.name && (
+              <Typography
+                color="red"
+                sx={{
+                  textAlign: "left",
+                  width: "100%",
+                }}>
+                {errors.name.message}
+              </Typography>
+            )}
 
             <TextField
               type="email"
@@ -70,7 +94,25 @@ const SignUp = () => {
               variant="outlined"
               size="small"
               fullWidth={true}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value:
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  message: "Invalid email address",
+                },
+              })}
             />
+            {errors.email && (
+              <Typography
+                color="red"
+                sx={{
+                  textAlign: "left",
+                  width: "100%",
+                }}>
+                {errors.email.message}
+              </Typography>
+            )}
 
             <Box sx={{width: "100%", position: "relative"}}>
               <TextField
@@ -79,12 +121,36 @@ const SignUp = () => {
                 variant="outlined"
                 size="small"
                 fullWidth={true}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters long",
+                  },
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/,
+                    message:
+                      "Password must contain at least one letter and one number and special characters",
+                  },
+                })}
               />
               <IconButton
                 onClick={() => setIsShowPass(!isShowPass)}
                 sx={{position: "absolute", right: "1rem"}}>
                 {isShowPass ? <RemoveRedEyeIcon /> : <VisibilityOffIcon />}
               </IconButton>
+
+              {errors.password && (
+                <Typography
+                  color="red"
+                  sx={{
+                    textAlign: "left",
+                    width: "100%",
+                  }}>
+                  {errors.password.message}
+                </Typography>
+              )}
             </Box>
 
             <Box sx={{width: "100%", position: "relative"}}>
@@ -94,13 +160,28 @@ const SignUp = () => {
                 variant="outlined"
                 size="small"
                 fullWidth={true}
+                {...register("confirmPassword", {
+                  required: "Confirm Password is required",
+                  validate: (value) =>
+                    value === password || "Passwords do not match!",
+                })}
               />
-
               <IconButton
                 onClick={() => setIsShowPass(!isShowPass)}
                 sx={{position: "absolute", right: "1rem"}}>
                 {isShowPass ? <RemoveRedEyeIcon /> : <VisibilityOffIcon />}
               </IconButton>
+
+              {errors.confirmPassword && (
+                <Typography
+                  color="red"
+                  sx={{
+                    textAlign: "left",
+                    width: "100%",
+                  }}>
+                  {errors.confirmPassword.message}
+                </Typography>
+              )}
             </Box>
 
             <TextField
@@ -109,7 +190,24 @@ const SignUp = () => {
               variant="outlined"
               size="small"
               fullWidth={true}
+              {...register("photoURL", {
+                required: "Photo URL is required",
+                pattern: {
+                  value: /^(ftp|http|https):\/\/[^ "]+$/,
+                  message: "Invalid photo URL format",
+                },
+              })}
             />
+            {errors.photoURL && (
+              <Typography
+                color="red"
+                sx={{
+                  textAlign: "left",
+                  width: "100%",
+                }}>
+                {errors.photoURL.message}
+              </Typography>
+            )}
             <Typography>
               Already Have an Account?{" "}
               <CustomLink text="Log In Here" path="/signin" />

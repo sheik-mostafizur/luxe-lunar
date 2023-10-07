@@ -6,6 +6,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <div>Hello world!</div>,
+    errorElement: <div>404 Error</div>,
   },
   {
     path: "/signin",
