@@ -3,7 +3,6 @@ import {
   Button,
   Container,
   IconButton,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,21 +12,13 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import {logo} from "../../assets/images";
 import Image from "../../components/ui/image";
 import {useState} from "react";
-import {useTheme} from "@emotion/react";
+import CustomLink from "../../components/ui/CustomLink";
 
 const SignIn = () => {
-  const {
-    palette: {
-      primary: {light},
-    },
-  } = useTheme();
-
   const [isShowPass, setIsShowPass] = useState(false);
+
   return (
-    <div
-      style={{
-        backgroundColor: light,
-      }}>
+    <Box bgcolor="primary.light">
       <Container
         maxWidth="lg"
         sx={{
@@ -89,7 +80,8 @@ const SignIn = () => {
               </IconButton>
             </Box>
             <Typography>
-              Have not an Account? <Link href="/signup">Sign Up Here</Link>
+              Have not an Account?{" "}
+              <CustomLink text="Sign Up Here" path="/signup" />
             </Typography>
             <Button type="submit" variant="contained" sx={{width: "200px"}}>
               Sign In
@@ -97,7 +89,7 @@ const SignIn = () => {
           </form>
         </Box>
       </Container>
-    </div>
+    </Box>
   );
 };
 

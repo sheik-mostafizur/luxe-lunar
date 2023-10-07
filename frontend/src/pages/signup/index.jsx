@@ -3,7 +3,6 @@ import {
   Button,
   Container,
   IconButton,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -13,21 +12,12 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import {logo} from "../../assets/images";
 import Image from "../../components/ui/image";
 import {useState} from "react";
-import {useTheme} from "@emotion/react";
+import CustomLink from "../../components/ui/CustomLink";
 
 const SignUp = () => {
-  const {
-    palette: {
-      primary: {light},
-    },
-  } = useTheme();
-
   const [isShowPass, setIsShowPass] = useState(false);
   return (
-    <div
-      style={{
-        backgroundColor: light,
-      }}>
+    <Box bgcolor="primary.light">
       <Container
         maxWidth="lg"
         sx={{
@@ -85,7 +75,7 @@ const SignUp = () => {
             <Box sx={{width: "100%", position: "relative"}}>
               <TextField
                 type={isShowPass ? "text" : "password"}
-                label="Your account password"
+                label="Password"
                 variant="outlined"
                 size="small"
                 fullWidth={true}
@@ -96,8 +86,33 @@ const SignUp = () => {
                 {isShowPass ? <RemoveRedEyeIcon /> : <VisibilityOffIcon />}
               </IconButton>
             </Box>
+
+            <Box sx={{width: "100%", position: "relative"}}>
+              <TextField
+                type={isShowPass ? "text" : "password"}
+                label="Confirm Password"
+                variant="outlined"
+                size="small"
+                fullWidth={true}
+              />
+
+              <IconButton
+                onClick={() => setIsShowPass(!isShowPass)}
+                sx={{position: "absolute", right: "1rem"}}>
+                {isShowPass ? <RemoveRedEyeIcon /> : <VisibilityOffIcon />}
+              </IconButton>
+            </Box>
+
+            <TextField
+              type="text"
+              label="Photo URL"
+              variant="outlined"
+              size="small"
+              fullWidth={true}
+            />
             <Typography>
-              Already Have an Account? <Link href="/signin">Log In Here</Link>
+              Already Have an Account?{" "}
+              <CustomLink text="Log In Here" path="/signin" />
             </Typography>
             <Button type="submit" variant="contained" sx={{width: "200px"}}>
               Sign Up
@@ -105,7 +120,7 @@ const SignUp = () => {
           </form>
         </Box>
       </Container>
-    </div>
+    </Box>
   );
 };
 
