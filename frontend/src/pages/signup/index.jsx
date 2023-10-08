@@ -16,9 +16,11 @@ import CustomLink from "../../components/ui/CustomLink";
 import {useForm} from "react-hook-form";
 import {uesAuthContext} from "../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
+import {updateProfile} from "firebase/auth";
+import {auth} from "../../firebase/firebase.config";
 
 const SignUp = () => {
-  const {logInUserWithGoogle} = uesAuthContext();
+  const {logInUserWithGoogle, createUser} = uesAuthContext();
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -29,10 +31,31 @@ const SignUp = () => {
     handleSubmit,
     formState: {errors},
     watch,
+    reset,
   } = useForm();
   const password = watch("password");
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const {name, email, password, photoURL} = data;
+
+    createUser(email, password)
+      .then(() => {
+        // update user name and photoURL
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL,
+        })
+          .then(() => {
+            // Profile updated!
+            // ...
+            setError("");
+            navigate("/");
+            reset();
+          })
+          .catch((error) => setError(error.message));
+      })
+      .catch((error) => setError(error.message));
+  };
 
   //  google authentication handle
   const handleLoginWithGoogle = () => {

@@ -20,16 +20,30 @@ import {useNavigate} from "react-router-dom";
 const SignIn = () => {
   const [isShowPass, setIsShowPass] = useState(false);
 
-  const {logInUserWithGoogle} = uesAuthContext();
+  const {logInUserWithGoogle, logInUser} = uesAuthContext();
   const [error, setError] = useState("");
+
   const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
 
   const {
     register,
     handleSubmit,
     formState: {errors},
+    reset,
   } = useForm();
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const {email, password} = data;
+
+    // login using email and password
+    logInUser(email, password)
+      .then(() => {
+        setError("");
+        reset();
+        navigate(from, {replace: true});
+      })
+      .catch((error) => setError(error.message));
+  };
 
   //  google authentication handle
   const handleLoginWithGoogle = () => {
