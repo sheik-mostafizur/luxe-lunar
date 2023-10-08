@@ -1,17 +1,7 @@
 import {styled} from "@mui/material";
 
 export const SpinnerOverlay = styled("div")`
-  height: 76vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
   box-shadow: 0 10rem white;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
   background-color: #fff;
 `;
 

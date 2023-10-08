@@ -6,9 +6,10 @@ import {
   signOut,
 } from "@firebase/auth";
 import {createContext, useContext, useEffect, useState} from "react";
-import {auth, googleProvider} from "../config/firebase.js";
-import LoaderSpinner from "../components/spinner/index.jsx";
-import axiosURL from "../axios/axiosURL.js";
+import {auth, googleProvider} from "../firebase/firebase.config";
+import {logo} from "../assets/images";
+import Spinner from "../components/spinner";
+import {Box} from "@mui/material";
 
 const UserContext = createContext({});
 
@@ -16,14 +17,6 @@ const UserContext = createContext({});
 export const uesAuthContext = () => useContext(UserContext);
 
 const AuthContext = ({children}) => {
-  // for theme start
-  const [theme, setTheme] = useState("dark");
-  const handleTheme = () => {
-    document.querySelector("html body").setAttribute("data-theme", theme);
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-  // for theme end
-
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
@@ -44,22 +37,10 @@ const AuthContext = ({children}) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (res) => {
       res ? setUser(res) : setUser(null);
-      if (res?.email) {
-        axiosURL
-          .post("jwt", {
-            params: {email: res?.email, name: res?.displayName},
-          })
-          .then((response) => {
-            const token = response?.data;
-            localStorage.setItem("access-token", token);
-          });
-      } else {
-        localStorage.removeItem("access-token");
-      }
       // if user is logged in successfully the loading stopped
       setLoading(false);
     });
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
   const userInfo = {
@@ -69,16 +50,22 @@ const AuthContext = ({children}) => {
     logInUser,
     logInUserWithGoogle,
     logOutUser,
-    handleTheme,
-    theme,
   };
 
   return (
     <UserContext.Provider value={userInfo}>
       {loading ? (
-        <div className="flex h-screen flex-col items-center justify-center">
-          <LoaderSpinner />
-        </div>
+        <Box
+          sx={{
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}>
+          <img className="w-48" src={logo} alt="Logo" />
+          <Spinner />
+        </Box>
       ) : (
         children
       )}

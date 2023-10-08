@@ -14,8 +14,14 @@ import Image from "../../components/ui/image";
 import {useState} from "react";
 import CustomLink from "../../components/ui/CustomLink";
 import {useForm} from "react-hook-form";
+import {uesAuthContext} from "../../context/AuthContext";
+import {useNavigate} from "react-router-dom";
 
 const SignUp = () => {
+  const {logInUserWithGoogle} = uesAuthContext();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
   const [isShowPass, setIsShowPass] = useState(false);
 
   const {
@@ -27,6 +33,16 @@ const SignUp = () => {
   const password = watch("password");
 
   const onSubmit = (data) => console.log(data);
+
+  //  google authentication handle
+  const handleLoginWithGoogle = () => {
+    logInUserWithGoogle()
+      .then(() => {
+        setError("");
+        navigate("/");
+      })
+      .catch((error) => setError(error.message));
+  };
 
   return (
     <Box bgcolor="primary.light" sx={{height: "100vh"}}>
@@ -55,7 +71,7 @@ const SignUp = () => {
           <Image src={logo} alt="Logo" maxWidth="150px" />
           <Typography variant="h3">Sign Up</Typography>
           <Box>
-            <Button variant="outlined">
+            <Button variant="outlined" onClick={handleLoginWithGoogle}>
               <GoogleIcon sx={{mr: 2}} />
               <Typography>Continue With Google</Typography>
             </Button>
@@ -206,6 +222,16 @@ const SignUp = () => {
                   width: "100%",
                 }}>
                 {errors.photoURL.message}
+              </Typography>
+            )}
+            {error && (
+              <Typography
+                color="red"
+                sx={{
+                  textAlign: "left",
+                  width: "100%",
+                }}>
+                {error}
               </Typography>
             )}
             <Typography>
